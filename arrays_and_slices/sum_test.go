@@ -1,0 +1,28 @@
+package arrays_and_slices
+
+import "testing"
+
+func TestSum(t *testing.T) {
+	t.Run("collection of 5 numbers", func(t *testing.T) {
+		numbers := []int{1, 2, 3, 4, 5}
+
+		got := Sum(numbers)
+		want := 15
+
+		assertEqualNumbers(t, got, want, numbers)
+	})
+}
+
+func assertEqualNumbers(t *testing.T, got, want int, numbers []int) {
+	if got != want {
+		t.Errorf("got %d, want %d, %v", got, want, numbers)
+	}
+}
+
+func BenchmarkSum(b *testing.B) {
+	numbers := []int{1, 2, 3, 4, 5}
+
+	for b.Loop() {
+		Sum(numbers)
+	}
+}
