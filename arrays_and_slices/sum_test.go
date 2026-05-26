@@ -1,6 +1,9 @@
 package arrays_and_slices
 
-import "testing"
+import (
+	"slices"
+	"testing"
+)
 
 func TestSum(t *testing.T) {
 	t.Run("collection of 5 numbers", func(t *testing.T) {
@@ -9,14 +12,35 @@ func TestSum(t *testing.T) {
 		got := Sum(numbers)
 		want := 15
 
-		assertEqualNumbers(t, got, want, numbers)
+		if got != want {
+			t.Errorf("got %d, want %d, %v", got, want, numbers)
+		}
 	})
 }
 
-func assertEqualNumbers(t *testing.T, got, want int, numbers []int) {
-	if got != want {
-		t.Errorf("got %d, want %d, %v", got, want, numbers)
-	}
+func TestSumAll(t *testing.T) {
+	t.Run("two collections of numbers", func(t *testing.T) {
+		numbers_one := []int{1, 2}
+		numbers_two := []int{0, 9}
+
+		got := SumAll(numbers_one, numbers_two)
+		want := []int{3, 9}
+
+		if !slices.Equal(got, want) {
+			t.Errorf("got %v, want %v", got, want)
+		}
+	})
+
+	t.Run("single collection of numbers", func(t *testing.T) {
+		numbers := []int{1, 1, 1}
+
+		got := SumAll(numbers)
+		want := []int{3}
+
+		if !slices.Equal(got, want) {
+			t.Errorf("got %v, want %v", got, want)
+		}
+	})
 }
 
 func BenchmarkSum(b *testing.B) {
@@ -24,5 +48,11 @@ func BenchmarkSum(b *testing.B) {
 
 	for b.Loop() {
 		Sum(numbers)
+	}
+}
+
+func BenchmarkSumAll(b *testing.B) {
+	for b.Loop() {
+		SumAll([]int{1, 2, 3}, []int{5, 6, 7})
 	}
 }
